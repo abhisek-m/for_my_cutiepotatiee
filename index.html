@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will you be my girlfriend? 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #ff85a1;
+    --pink-light: #ffc2d1;
+    --pink-pale: #fff0f3;
+    --pink-deep: #e05c7a;
+    --white: #ffffff;
+    --shadow: 0 8px 32px rgba(255,133,161,0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fff0f3 0%, #ffe4ed 40%, #ffd6e7 100%);
+    font-family: 'Quicksand', sans-serif;
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* ── Sparkle canvas background ── */
+  #sparkle-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Main card ── */
+  .card {
+    position: relative;
+    z-index: 2;
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(12px);
+    border-radius: 32px;
+    border: 2px solid rgba(255,194,209,0.6);
+    box-shadow: var(--shadow), inset 0 0 0 1px rgba(255,255,255,0.8);
+    padding: clamp(2rem, 6vw, 3.5rem) clamp(1.5rem, 7vw, 4rem);
+    max-width: min(480px, 92vw);
+    width: 100%;
+    text-align: center;
+    animation: floatIn 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(40px) scale(0.92); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .hearts-top {
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    line-height: 1;
+    margin-bottom: 0.6rem;
+    animation: heartbeat 1.4s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    50%      { transform: scale(1.15); }
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+    color: #c94070;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: clamp(0.82rem, 2.8vw, 0.98rem);
+    color: #e07090;
+    margin-bottom: 1.8rem;
+    font-weight: 600;
+  }
+
+  /* ── GIF area ── */
+  .gif-area {
+    height: clamp(140px, 35vw, 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.6rem;
+    transition: all 0.4s ease;
+  }
+
+  .gif-area img {
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 16px;
+    object-fit: contain;
+    animation: gifPop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 4px 20px rgba(255,100,130,0.18);
+    transition: opacity 0.15s ease;
+  }
+
+  @keyframes gifPop {
+    from { transform: scale(0.7); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  /* ── Buttons ── */
+  .btn-row {
+    display: flex;
+    gap: clamp(0.8rem, 3vw, 1.4rem);
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 72px;
+  }
+
+  .btn {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1rem, 3.5vw, 1.15rem);
+    padding: 0.75em 2em;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    white-space: nowrap;
+  }
+
+  .btn-yes {
+    background: linear-gradient(135deg, #ff85a1, #e0496a);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(224,73,106,0.38);
+    animation: pulseYes 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseYes {
+    0%,100% { box-shadow: 0 6px 20px rgba(224,73,106,0.38); }
+    50%      { box-shadow: 0 6px 36px rgba(224,73,106,0.62); }
+  }
+
+  .btn-yes:hover { transform: scale(1.07); }
+  .btn-yes:active { transform: scale(0.96); }
+
+  .btn-no {
+    background: #fff;
+    color: #c06080;
+    border: 2px solid #ffc2d1;
+    box-shadow: 0 4px 14px rgba(255,133,161,0.18);
+    position: relative;
+  }
+
+  .btn-no:hover { background: #fff0f3; }
+  .btn-no:active { transform: scale(0.96); }
+
+  /* ── Yes screen ── */
+  #yes-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    animation: floatIn 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  #yes-screen .big-emoji { font-size: clamp(2.5rem, 10vw, 4rem); }
+
+  #yes-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 5.5vw, 2rem);
+    color: #c94070;
+    line-height: 1.2;
+  }
+
+  #yes-screen .yes-sub {
+    font-size: clamp(0.88rem, 3vw, 1.05rem);
+    color: #e07090;
+    font-weight: 600;
+  }
+
+  #yes-screen img {
+    max-width: min(240px, 75vw);
+    border-radius: 20px;
+    box-shadow: 0 6px 28px rgba(255,100,130,0.22);
+    animation: gifPop 0.5s ease both;
+  }
+
+  /* ── Confetti canvas ── */
+  #confetti-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="sparkle-canvas"></canvas>
+<canvas id="confetti-canvas"></canvas>
+
+<div class="card" id="main-card">
+  <!-- Question screen -->
+  <div id="question-screen">
+    <div class="hearts-top">💖✨💖</div>
+    <h1>Will you be my girlfriend? 💖</h1>
+    <p class="subtitle">Think carefully… 🌸</p>
+
+    <div class="gif-area" id="gif-area">
+      <img id="main-gif" src="https://media.tenor.com/8DMJ2D8tOXYAAAAC/propose-love.gif" alt="proposing" onerror="this.src='https://media.tenor.com/nz_OEj0HRDMAAAAC/cute-love.gif'" />
+    </div>
+
+    <div class="btn-row" id="btn-row">
+      <button class="btn btn-yes" id="btn-yes" onclick="handleYes()">Yes 😍</button>
+      <button class="btn btn-no"  id="btn-no"  onclick="handleNo()">No 😢</button>
+    </div>
+  </div>
+
+  <!-- Yes screen -->
+  <div id="yes-screen">
+    <div class="big-emoji">🎉❤️🎉</div>
+    <h2>HURRAY! You said YES! 🥳</h2>
+    <img id="yes-gif" src="https://media.tenor.com/nFbBKfECBZgAAAAC/love-hug.gif" alt="love hug" />
+    <p class="yes-sub">You just made me the happiest person 🥹</p>
+    <p class="yes-sub">My heart is yours forever 💕</p>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// SPARKLE BACKGROUND
+// ─────────────────────────────────────────────
+(function() {
+  const canvas = document.getElementById('sparkle-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, sparks = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function Spark() {
+    this.reset = function() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.r = Math.random() * 2 + 0.5;
+      this.alpha = Math.random();
+      this.speed = Math.random() * 0.012 + 0.006;
+      this.phase = Math.random() * Math.PI * 2;
+      this.drift = (Math.random() - 0.5) * 0.3;
+    };
+    this.reset();
+  }
+
+  for (let i = 0; i < 130; i++) sparks.push(new Spark());
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    sparks.forEach(s => {
+      s.phase += s.speed;
+      s.x += s.drift;
+      if (s.x < 0) s.x = W;
+      if (s.x > W) s.x = 0;
+      const a = (Math.sin(s.phase) + 1) / 2;
+      ctx.save();
+      ctx.globalAlpha = a * 0.75;
+      // 4-pointed star
+      ctx.fillStyle = `hsl(${330 + Math.sin(s.phase)*30}, 90%, ${70 + a * 20}%)`;
+      drawStar(ctx, s.x, s.y, 4, s.r * 2.5, s.r * 0.8);
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  function drawStar(ctx, cx, cy, spikes, outer, inner) {
+    let rot = (Math.PI / 2) * 3;
+    const step = Math.PI / spikes;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - outer);
+    for (let i = 0; i < spikes; i++) {
+      ctx.lineTo(cx + Math.cos(rot) * outer, cy + Math.sin(rot) * outer);
+      rot += step;
+      ctx.lineTo(cx + Math.cos(rot) * inner, cy + Math.sin(rot) * inner);
+      rot += step;
+    }
+    ctx.lineTo(cx, cy - outer);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+})();
+
+// ─────────────────────────────────────────────
+// NO BUTTON LOGIC
+// ─────────────────────────────────────────────
+const noTexts = [
+  "No 😢",
+  "Seriously? 😢",
+  "Don't say no 😭",
+  "I'll be sad 😢",
+  "Nooooo 😭",
+  "Pleeease 🥺",
+  "Last chance 👉👈",
+  "Fine… 💔"
+];
+
+// Sad GIFs — shown from the very first No click
+const sadGifs = [
+  "data:image/gif;base64,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",
+  "https://media.tenor.com/x8v1oNUOmg4AAAAC/sad-crying.gif",
+  "https://media.tenor.com/On7kvXhzml4AAAAC/sad-cute.gif",
+  "https://media.tenor.com/SzPSBZOKSDAAAAAC/bunny-sad.gif",
+  "https://media.tenor.com/mVXeVd7bOmAAAAAC/crying-sad.gif",
+  "https://media.tenor.com/E5GKYpBNLmEAAAAC/sad-cry.gif",
+  "https://media.tenor.com/4bEFJZMGGKsAAAAC/sad-puppy.gif",
+  "https://media.tenor.com/yUG7-LkCGsEAAAAC/sad-tears.gif"
+];
+
+let noCount = 0;
+let noScale = 1;
+let escaping = false;
+
+const btnNo    = document.getElementById('btn-no');
+const btnRow   = document.getElementById('btn-row');
+const mainGif  = document.getElementById('main-gif');
+
+function handleNo() {
+  noCount++;
+
+  // Change text
+  if (noCount < noTexts.length) {
+    btnNo.textContent = noTexts[noCount];
+  }
+
+  // Swap GIF — sad gif from very first No click
+  const gifIndex = Math.min(noCount - 1, sadGifs.length - 1);
+  mainGif.style.opacity = '0';
+  setTimeout(() => {
+    mainGif.src = sadGifs[gifIndex];
+    mainGif.style.animation = 'none';
+    void mainGif.offsetWidth;
+    mainGif.style.animation = 'gifPop 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+    mainGif.style.opacity = '1';
+  }, 150);
+
+  // Shrink button
+  noScale = Math.max(0.55, noScale - 0.09);
+  btnNo.style.transform = `scale(${noScale})`;
+
+  // After 5 clicks → escape mode
+  if (noCount >= 5 && !escaping) {
+    escaping = true;
+    activateEscape();
+  }
+}
+
+function activateEscape() {
+  const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+  if (isMobile) {
+    // Mobile: jump on touch
+    btnNo.addEventListener('touchstart', escapeMobile, { passive: true });
+  } else {
+    // Desktop: flee on mouse proximity
+    document.addEventListener('mousemove', escapeDesktop);
+  }
+}
+
+function getRandomPos() {
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const bw = btnNo.offsetWidth;
+  const bh = btnNo.offsetHeight;
+  const margin = 20;
+  const x = margin + Math.random() * (vw - bw - margin * 2);
+  const y = margin + Math.random() * (vh - bh - margin * 2);
+  return { x, y };
+}
+
+function teleportBtn() {
+  const { x, y } = getRandomPos();
+  btnNo.style.position = 'fixed';
+  btnNo.style.left = x + 'px';
+  btnNo.style.top  = y + 'px';
+  btnNo.style.zIndex = 100;
+  btnNo.style.transition = 'left 0.25s ease, top 0.25s ease';
+  // Remove from btn-row flow
+  if (!document.body.contains(btnNo) || btnNo.parentNode !== document.body) {
+    document.body.appendChild(btnNo);
+  }
+}
+
+function escapeMobile(e) {
+  e.preventDefault();
+  teleportBtn();
+}
+
+function escapeDesktop(e) {
+  const rect = btnNo.getBoundingClientRect();
+  const cx = rect.left + rect.width  / 2;
+  const cy = rect.top  + rect.height / 2;
+  const dx = e.clientX - cx;
+  const dy = e.clientY - cy;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist < 120) {
+    teleportBtn();
+  }
+}
+
+// ─────────────────────────────────────────────
+// YES BUTTON
+// ─────────────────────────────────────────────
+function handleYes() {
+  document.getElementById('question-screen').style.display = 'none';
+  const ys = document.getElementById('yes-screen');
+  ys.style.display = 'flex';
+  // Clean up escape listeners
+  document.removeEventListener('mousemove', escapeDesktop);
+  // Remove the escaped No button if it's floating
+  if (btnNo.parentNode === document.body) btnNo.remove();
+  // Fire confetti
+  launchConfetti();
+}
+
+// ─────────────────────────────────────────────
+// CONFETTI
+// ─────────────────────────────────────────────
+(function() {
+  const canvas  = document.getElementById('confetti-canvas');
+  const ctx     = canvas.getContext('2d');
+  let pieces    = [];
+  let running   = false;
+  let animId;
+
+  const COLORS = [
+    '#ff85a1','#ffb3c1','#ffd6e7','#ff4d6d',
+    '#ff99b4','#ffc8dd','#ffafcc','#ffe4ed',
+    '#f72585','#b5179e','#c77dff','#ffd700'
+  ];
+
+  function Piece() {
+    this.reset = function() {
+      this.x  = Math.random() * canvas.width;
+      this.y  = -10;
+      this.w  = Math.random() * 10 + 5;
+      this.h  = Math.random() * 6  + 3;
+      this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      this.angle = Math.random() * 360;
+      this.spin  = (Math.random() - 0.5) * 8;
+      this.vx = (Math.random() - 0.5) * 4;
+      this.vy = Math.random() * 4 + 2;
+      this.alpha = 1;
+    };
+    this.reset();
+  }
+
+  window.launchConfetti = function() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    pieces = [];
+    for (let i = 0; i < 200; i++) {
+      const p = new Piece();
+      p.y = -Math.random() * canvas.height * 0.5; // stagger entry
+      pieces.push(p);
+    }
+    if (!running) { running = true; animateConf(); }
+    // Stop after 5s
+    setTimeout(() => { running = false; cancelAnimationFrame(animId); ctx.clearRect(0,0,canvas.width,canvas.height); }, 5000);
+  };
+
+  function animateConf() {
+    if (!running) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      p.x     += p.vx;
+      p.y     += p.vy;
+      p.angle += p.spin;
+      if (p.y > canvas.height * 0.8) p.alpha -= 0.015;
+      if (p.alpha <= 0 || p.y > canvas.height + 20) p.reset();
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    animId = requestAnimationFrame(animateConf);
+  }
+})();
+</script>
+</body>
+</html>
